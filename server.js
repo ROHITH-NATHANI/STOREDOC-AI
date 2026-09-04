@@ -46,7 +46,26 @@ try {
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname)); // Serve static files (index.html, css, js)
+
+// Serve static assets with fallback paths for both root and /api environments
+app.use('/css', express.static(path.join(__dirname, 'css')));
+app.use('/css', express.static(path.join(__dirname, '..', 'css')));
+app.use('/js', express.static(path.join(__dirname, 'js')));
+app.use('/js', express.static(path.join(__dirname, '..', 'js')));
+app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, '..')));
+
+// Explicit root route serving index.html
+app.get('/', (req, res) => {
+    const rootIndex = path.join(__dirname, 'index.html');
+    const parentIndex = path.join(__dirname, '..', 'index.html');
+    if (fs.existsSync(rootIndex)) {
+        return res.sendFile(rootIndex);
+    } else if (fs.existsSync(parentIndex)) {
+        return res.sendFile(parentIndex);
+    }
+    res.send('StoreDoc AI Enterprise Portal');
+});
 
 // Database helpers
 function readData() {
