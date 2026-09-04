@@ -3,24 +3,44 @@ const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Storage Quota: 1 TB
 const MAX_STORAGE = 1 * 1024 * 1024 * 1024 * 1024; // 1 TB total storage allocation
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB per file
 
-// Setup directories and files
-const UPLOADS_DIR = path.join(__dirname, 'uploads');
-const DATA_FILE = path.join(__dirname, 'data.json');
+// Environment-aware directories (Vercel serverless uses /tmp)
+const isVercel = Boolean(process.env.VERCEL);
+const UPLOADS_DIR = isVercel ? path.join(os.tmpdir(), 'uploads') : path.join(__dirname, 'uploads');
+const DATA_FILE = isVercel ? path.join(os.tmpdir(), 'data.json') : path.join(__dirname, 'data.json');
 
-if (!fs.existsSync(UPLOADS_DIR)) {
-    fs.mkdirSync(UPLOADS_DIR);
+// Safe initialization of directories and database
+try {
+    if (!fs.existsSync(UPLOADS_DIR)) {
+        fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    }
+} catch (e) {
+    console.warn('Uploads directory init warning:', e.message);
 }
 
-if (!fs.existsSync(DATA_FILE)) {
-    fs.writeFileSync(DATA_FILE, JSON.stringify([]));
+try {
+    if (!fs.existsSync(DATA_FILE)) {
+        const rootData = path.join(__dirname, 'data.json');
+        if (isVercel && fs.existsSync(rootData)) {
+            try {
+                fs.copyFileSync(rootData, DATA_FILE);
+            } catch (copyErr) {
+                fs.writeFileSync(DATA_FILE, JSON.stringify([]));
+            }
+        } else {
+            fs.writeFileSync(DATA_FILE, JSON.stringify([]));
+        }
+    }
+} catch (e) {
+    console.warn('Data file init warning:', e.message);
 }
 
 // Middleware
@@ -149,6 +169,20 @@ app.get('/api/files/:id/view', (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+// API: Status & Health
+app.get('/api', (req, res) => {
+    res.json({ name: 'StoreDoc AI API', status: 'active', quota: '1 TB' });
 });
+
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', uptime: process.uptime(), time: new Date().toISOString() });
+});
+
+// Start local server if run directly (node server.js)
+if (require.main === module || !isVercel) {
+    app.listen(PORT, () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+    });
+}
+
+module.exports = app;
