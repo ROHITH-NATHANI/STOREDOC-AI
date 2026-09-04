@@ -146,6 +146,32 @@ app.delete('/api/files/:id', (req, res) => {
     }
 });
 
+// API: Batch delete files
+app.post('/api/files/batch-delete', (req, res) => {
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+        return res.status(400).json({ error: 'No IDs provided' });
+    }
+
+    let files = readData();
+    let deletedCount = 0;
+
+    ids.forEach(id => {
+        const fileRecord = files.find(f => f.id === id);
+        if (fileRecord) {
+            if (fs.existsSync(fileRecord.path)) {
+                try { fs.unlinkSync(fileRecord.path); } catch (e) {}
+            }
+            deletedCount++;
+        }
+    });
+
+    files = files.filter(f => !ids.includes(f.id));
+    writeData(files);
+
+    res.json({ message: `Successfully deleted ${deletedCount} files`, deletedCount });
+});
+
 // API: Download/View file
 app.get('/api/files/:id/download', (req, res) => {
     const files = readData();

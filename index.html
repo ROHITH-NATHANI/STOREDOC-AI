@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="StoreDoc AI — A premium team document storage and management portal. Upload, view, download, and organize all your files in one place.">
+    <meta name="description" content="StoreDoc AI — Enterprise Document Portal with AI Document Intelligence, In-Browser Previews, 1 TB Storage, and Cloud Sync.">
     <meta name="theme-color" content="#060a13">
-    <title>StoreDoc AI — Next-Gen Document Portal</title>
+    <title>StoreDoc AI — Next-Gen Enterprise Document Portal</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,6 +24,21 @@
         <div class="bg-orb bg-orb--4"></div>
     </div>
     <div class="bg-grid" aria-hidden="true"></div>
+
+    <!-- ==================== GLOBAL DRAG & DROP OVERLAY ==================== -->
+    <div class="global-dropzone" id="global-dropzone" aria-hidden="true">
+        <div class="global-dropzone__content">
+            <div class="global-dropzone__pulse"></div>
+            <div class="global-dropzone__icon">📥</div>
+            <h2 class="global-dropzone__title">Drop Files Anywhere</h2>
+            <p class="global-dropzone__subtitle">Instantly upload documents to StoreDoc AI Enterprise Cloud</p>
+            <div class="global-dropzone__badges">
+                <span>⚡ Auto-Indexed</span>
+                <span>🔒 Secure Storage</span>
+                <span>🤖 AI Ready</span>
+            </div>
+        </div>
+    </div>
 
     <!-- ==================== APP WRAPPER ==================== -->
     <div class="app">
@@ -44,12 +59,29 @@
                         <span class="header-title">StoreDoc</span>
                         <span class="badge-ai">AI PRO</span>
                     </div>
-                    <div class="header-subtitle">Enterprise Cloud Repository</div>
+                    <div class="header-subtitle">Enterprise Cloud Repository · 1 TB Quota</div>
                 </div>
             </div>
 
             <!-- Header Quick Actions -->
             <nav class="header-nav">
+                <!-- Command Palette Trigger Button -->
+                <button class="btn btn--spotlight" id="btn-spotlight" title="Open Command Palette (Ctrl + K)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <span class="spotlight-btn-text">Spotlight</span>
+                    <kbd class="shortcut-kbd">Ctrl K</kbd>
+                </button>
+
+                <!-- Activity Feed Toggle -->
+                <button class="icon-btn" id="btn-activity-toggle" title="Recent Activity Timeline" aria-label="Activity Feed">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                </button>
+
                 <!-- Sound Effects Toggle -->
                 <button class="icon-btn" id="sound-toggle" title="Toggle Sound Effects (Interface Beep)" aria-label="Toggle Sound Effects">
                     <span class="sound-icon sound-icon--on">
@@ -117,10 +149,10 @@
                     <div class="stat-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
                     </div>
-                    <span class="stat-meta" id="stat-storage-pct">0% Used</span>
+                    <span class="stat-meta" id="stat-storage-pct">0% of 1 TB</span>
                 </div>
                 <div class="stat-value" id="stat-storage">0 B</div>
-                <div class="stat-label">Server Storage</div>
+                <div class="stat-label">Used Storage (1 TB Total)</div>
             </div>
 
             <div class="stat stat--members">
@@ -138,20 +170,42 @@
                     <div class="stat-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
                     </div>
+                    <span class="stat-badge stat-badge--ai" title="AI Document Intelligence enabled">AI READY</span>
                 </div>
                 <div class="stat-value" id="stat-types">0</div>
-                <div class="stat-label">File Formats</div>
+                <div class="stat-label">Indexed Formats</div>
             </div>
         </section>
 
-        <!-- ===== STORAGE USAGE BAR ===== -->
+        <!-- ===== MULTI-SEGMENT 1 TB STORAGE USAGE BAR ===== -->
         <div class="storage-bar-card">
             <div class="storage-bar-header">
-                <span class="storage-bar-title">Cloud Storage Allocation</span>
-                <span class="storage-bar-info" id="storage-bar-text">0 B of 10 GB allocated</span>
+                <div class="storage-bar-title-group">
+                    <span class="storage-bar-title">Enterprise Storage Allocation</span>
+                    <span class="storage-bar-badge">1,024 GB Quota</span>
+                </div>
+                <span class="storage-bar-info" id="storage-bar-text">0 B used of 1.0 TB</span>
             </div>
-            <div class="storage-bar-track">
-                <div class="storage-bar-fill" id="storage-bar-fill" style="width: 1%;"></div>
+            
+            <!-- Multi-segment visual bar -->
+            <div class="storage-bar-track" id="storage-bar-track" title="Hover over category segments for details">
+                <div class="storage-segment segment-pdf" id="seg-pdf" style="width: 0%;" title="PDF Documents"></div>
+                <div class="storage-segment segment-word" id="seg-word" style="width: 0%;" title="Word Documents"></div>
+                <div class="storage-segment segment-excel" id="seg-excel" style="width: 0%;" title="Spreadsheets"></div>
+                <div class="storage-segment segment-ppt" id="seg-ppt" style="width: 0%;" title="Presentations"></div>
+                <div class="storage-segment segment-image" id="seg-image" style="width: 0%;" title="Images"></div>
+                <div class="storage-segment segment-txt" id="seg-txt" style="width: 0%;" title="Code & Text"></div>
+                <div class="storage-segment segment-other" id="seg-other" style="width: 0%;" title="Other Files"></div>
+            </div>
+
+            <!-- Category Breakdown Legend Pills -->
+            <div class="storage-legend" id="storage-legend">
+                <div class="legend-item" data-cat="pdf"><span class="legend-dot dot-pdf"></span><span class="legend-label">PDF</span><span class="legend-val" id="leg-val-pdf">0 B</span></div>
+                <div class="legend-item" data-cat="word"><span class="legend-dot dot-word"></span><span class="legend-label">Word</span><span class="legend-val" id="leg-val-word">0 B</span></div>
+                <div class="legend-item" data-cat="excel"><span class="legend-dot dot-excel"></span><span class="legend-label">Excel</span><span class="legend-val" id="leg-val-excel">0 B</span></div>
+                <div class="legend-item" data-cat="image"><span class="legend-dot dot-image"></span><span class="legend-label">Images</span><span class="legend-val" id="leg-val-image">0 B</span></div>
+                <div class="legend-item" data-cat="txt"><span class="legend-dot dot-txt"></span><span class="legend-label">Code/Text</span><span class="legend-val" id="leg-val-txt">0 B</span></div>
+                <div class="legend-item" data-cat="other"><span class="legend-dot dot-other"></span><span class="legend-label">Other</span><span class="legend-val" id="leg-val-other">0 B</span></div>
             </div>
         </div>
 
@@ -162,7 +216,8 @@
                 <span class="search__icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 </span>
-                <input type="text" class="search__input" id="search-input" placeholder="Search by name, uploader, format..." autocomplete="off">
+                <input type="text" class="search__input" id="search-input" placeholder="Search files, uploaders, contents..." autocomplete="off">
+                <kbd class="search__kbd" id="search-kbd-trigger" title="Press Ctrl + K to open spotlight search">Ctrl+K</kbd>
                 <button class="search__clear" id="search-clear" title="Clear search" aria-label="Clear search" style="display: none;">✕</button>
             </div>
 
@@ -182,6 +237,7 @@
             <div class="filters-container">
                 <div class="filters" id="filters-list">
                     <button class="filter active" data-filter="all">All Files</button>
+                    <button class="filter filter--starred" data-filter="starred" title="View Favorite Documents">⭐ Starred</button>
                     <button class="filter" data-filter="pdf">📕 PDF</button>
                     <button class="filter" data-filter="word">📘 Word</button>
                     <button class="filter" data-filter="excel">📗 Excel</button>
@@ -193,8 +249,14 @@
                 </div>
             </div>
 
-            <!-- View Modes (Grid / List) -->
+            <!-- View Modes (Grid / List) & Batch Toggle -->
             <div class="view-modes">
+                <button class="view-mode" id="btn-toggle-select" title="Toggle Multi-Select Batch Mode" aria-label="Select Mode">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 11 12 14 22 4"></polyline>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                </button>
                 <button class="view-mode active" id="view-grid" title="Grid View" aria-label="Grid View">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
                 </button>
@@ -209,48 +271,235 @@
 
     </div>
 
-    <!-- ==================== MOBILE BOTTOM NAVIGATION ==================== -->
-    <nav class="mobile-bottom-nav" aria-label="Mobile Navigation">
-        <button class="mobile-nav-item active" id="mob-nav-home" title="Documents List">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
-            </svg>
-            <span>Docs</span>
-        </button>
+    <!-- ==================== FLOATING BATCH ACTION BAR ==================== -->
+    <div class="batch-bar" id="batch-bar" role="toolbar" aria-label="Batch Actions" style="display:none;">
+        <div class="batch-bar__inner">
+            <div class="batch-bar__info">
+                <span class="batch-bar__count" id="batch-count">0</span>
+                <span class="batch-bar__label">files selected</span>
+            </div>
+            <div class="batch-bar__actions">
+                <button class="btn btn--sm btn--ghost" id="batch-select-all">Select All</button>
+                <button class="btn btn--sm btn--primary" id="batch-download" title="Download selected files">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16"/></svg>
+                    <span>Download All</span>
+                </button>
+                <button class="btn btn--sm btn--danger" id="batch-delete" title="Delete selected files">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m2 0v14a2 2 0 01-2 2H8a2 2 0 01-2-2V6h12z"/></svg>
+                    <span>Delete</span>
+                </button>
+                <button class="batch-bar__close" id="batch-cancel" title="Cancel selection">✕</button>
+            </div>
+        </div>
+    </div>
 
-        <button class="mobile-nav-item" id="mob-nav-stats" title="Toggle Stats">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="20" x2="18" y2="10"/>
-                <line x1="12" y1="20" x2="12" y2="4"/>
-                <line x1="6" y1="20" x2="6" y2="14"/>
-            </svg>
-            <span>Stats</span>
-        </button>
+    <!-- ==================== AI DOCUMENT INTELLIGENCE SIDE-DRAWER ==================== -->
+    <div class="ai-drawer-overlay" id="ai-drawer-overlay" aria-hidden="true"></div>
+    <aside class="ai-drawer" id="ai-drawer" role="dialog" aria-modal="true" aria-labelledby="ai-drawer-title">
+        <div class="ai-drawer__header">
+            <div class="ai-drawer__brand">
+                <div class="ai-drawer__badge">
+                    <span class="ai-pulse-dot"></span>
+                    <span>STOREDOC AI</span>
+                </div>
+                <h3 class="ai-drawer__doc-name" id="ai-drawer-title">Document Intelligence</h3>
+                <div class="ai-drawer__doc-meta" id="ai-drawer-meta">Select a document to inspect</div>
+            </div>
+            <button class="modal__close" id="ai-drawer-close" title="Close AI Panel" aria-label="Close">✕</button>
+        </div>
 
-        <!-- Center Upload FAB -->
-        <button class="mobile-upload-fab" id="mob-upload-fab" title="Quick Upload Document" aria-label="Upload Document">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-        </button>
+        <!-- AI Drawer Tabs Navigation -->
+        <div class="ai-drawer__tabs">
+            <button class="ai-tab active" data-tab="summary">⚡ Summary</button>
+            <button class="ai-tab" data-tab="insights">💡 Insights</button>
+            <button class="ai-tab" data-tab="tags">🏷️ Tags</button>
+            <button class="ai-tab" data-tab="chat">💬 Ask AI</button>
+        </div>
 
-        <button class="mobile-nav-item" id="mob-nav-search" title="Focus Search">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <span>Search</span>
-        </button>
+        <!-- AI Drawer Body Panels -->
+        <div class="ai-drawer__content">
+            <!-- Tab 1: Executive Summary -->
+            <div class="ai-panel active" id="ai-panel-summary">
+                <div class="ai-card">
+                    <div class="ai-card__title">
+                        <span>🤖 Executive Summary</span>
+                        <button class="btn-copy-sm" id="btn-copy-summary" title="Copy summary">Copy</button>
+                    </div>
+                    <div class="ai-summary-text" id="ai-summary-text">
+                        Analyzing document structure and extracting key highlights...
+                    </div>
+                </div>
 
-        <button class="mobile-nav-item" id="mob-nav-theme" title="Toggle Light/Dark Theme">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-            </svg>
-            <span>Theme</span>
-        </button>
-    </nav>
+                <div class="ai-card">
+                    <div class="ai-card__title">🎯 Key Takeaways</div>
+                    <ul class="ai-takeaways-list" id="ai-takeaways-list"></ul>
+                </div>
+            </div>
+
+            <!-- Tab 2: Insights & Metrics -->
+            <div class="ai-panel" id="ai-panel-insights">
+                <div class="ai-metrics-grid">
+                    <div class="ai-metric">
+                        <span class="ai-metric__num" id="ai-metric-words">~0</span>
+                        <span class="ai-metric__lbl">Est. Words</span>
+                    </div>
+                    <div class="ai-metric">
+                        <span class="ai-metric__num" id="ai-metric-read">1 min</span>
+                        <span class="ai-metric__lbl">Read Time</span>
+                    </div>
+                    <div class="ai-metric">
+                        <span class="ai-metric__num" id="ai-metric-type">PDF</span>
+                        <span class="ai-metric__lbl">Format</span>
+                    </div>
+                    <div class="ai-metric">
+                        <span class="ai-metric__num" id="ai-metric-security">AES-256</span>
+                        <span class="ai-metric__lbl">Integrity</span>
+                    </div>
+                </div>
+
+                <div class="ai-card" style="margin-top: 14px;">
+                    <div class="ai-card__title">🔍 Entity & Content Detection</div>
+                    <div class="ai-entities-list" id="ai-entities-list"></div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Smart Tags -->
+            <div class="ai-panel" id="ai-panel-tags">
+                <div class="ai-card">
+                    <div class="ai-card__title">🏷️ AI-Generated Category Tags</div>
+                    <p class="ai-card__desc">Auto-classified based on metadata, format patterns, and document purpose.</p>
+                    <div class="ai-tags-container" id="ai-tags-container"></div>
+                </div>
+            </div>
+
+            <!-- Tab 4: Interactive Document Q&A Chat -->
+            <div class="ai-panel" id="ai-panel-chat">
+                <div class="ai-chat-history" id="ai-chat-history">
+                    <div class="chat-msg chat-msg--ai">
+                        <div class="chat-avatar">🤖</div>
+                        <div class="chat-bubble">
+                            Hello! I am your StoreDoc AI assistant. What would you like to know about this document?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-chat-quick-prompts">
+                    <button class="quick-prompt" data-prompt="What are the key points in this file?">📌 Key points</button>
+                    <button class="quick-prompt" data-prompt="Who contributed to this document?">👤 Contributors</button>
+                    <button class="quick-prompt" data-prompt="Is this file suitable for client sharing?">🔒 Security check</button>
+                </div>
+
+                <form class="ai-chat-form" id="ai-chat-form">
+                    <input type="text" class="ai-chat-input" id="ai-chat-input" placeholder="Ask a question about this file..." autocomplete="off">
+                    <button type="submit" class="ai-chat-send" id="ai-chat-send" title="Send question">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ==================== SPOTLIGHT COMMAND PALETTE (Ctrl + K) ==================== -->
+    <div class="overlay overlay--spotlight" id="spotlight-overlay" role="dialog" aria-modal="true" aria-label="Command Palette">
+        <div class="spotlight-box">
+            <div class="spotlight-search-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="spotlight-search-icon">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" class="spotlight-input" id="spotlight-input" placeholder="Type a file name or command..." autocomplete="off">
+                <kbd class="spotlight-esc-badge" id="spotlight-close-btn">ESC</kbd>
+            </div>
+            
+            <div class="spotlight-results" id="spotlight-results">
+                <!-- Results rendered dynamically -->
+            </div>
+
+            <div class="spotlight-footer">
+                <div class="spotlight-hints">
+                    <span><kbd>↑</kbd> <kbd>↓</kbd> Navigate</span>
+                    <span><kbd>↵</kbd> Open</span>
+                    <span><kbd>Esc</kbd> Close</span>
+                </div>
+                <div class="spotlight-powered">StoreDoc AI Pro</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== RECENT ACTIVITY FEED DRAWER ==================== -->
+    <div class="activity-drawer-overlay" id="activity-drawer-overlay" aria-hidden="true"></div>
+    <aside class="activity-drawer" id="activity-drawer" role="dialog" aria-modal="true" aria-label="Recent Activity">
+        <div class="activity-drawer__header">
+            <div class="activity-drawer__title-group">
+                <span class="activity-drawer__icon">⚡</span>
+                <h3 class="activity-drawer__title">Recent Activity</h3>
+            </div>
+            <button class="modal__close" id="activity-drawer-close" aria-label="Close">✕</button>
+        </div>
+        <div class="activity-drawer__body" id="activity-timeline">
+            <!-- Timeline items rendered dynamically -->
+        </div>
+    </aside>
+
+    <!-- ==================== SHARE MODAL ==================== -->
+    <div class="overlay" id="share-overlay" role="dialog" aria-modal="true" aria-labelledby="share-title">
+        <div class="modal modal--share">
+            <div class="modal__head">
+                <div class="modal__title-wrapper">
+                    <span class="modal__title-icon">🔗</span>
+                    <h2 class="modal__title" id="share-title">Share Document</h2>
+                </div>
+                <button class="modal__close" id="share-close" aria-label="Close">✕</button>
+            </div>
+            <div class="modal__body">
+                <div class="share-doc-preview" id="share-doc-preview">
+                    <span class="share-doc-icon" id="share-doc-icon">📄</span>
+                    <div class="share-doc-meta">
+                        <div class="share-doc-name" id="share-doc-name">Document.pdf</div>
+                        <div class="share-doc-sub" id="share-doc-sub">Ready to share</div>
+                    </div>
+                </div>
+
+                <div class="field" style="margin-top: 14px;">
+                    <label>Direct Permashare Link</label>
+                    <div class="share-link-row">
+                        <input type="text" class="share-link-input" id="share-link-input" readonly>
+                        <button class="btn btn--primary" id="btn-copy-share-link">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            <span id="btn-copy-share-text">Copy Link</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Simulated Instant QR Code -->
+                <div class="share-qr-wrap">
+                    <div class="share-qr-box" id="share-qr-box" title="Scan with mobile phone">
+                        <svg viewBox="0 0 100 100" class="qr-svg">
+                            <rect width="100" height="100" fill="white" rx="6"/>
+                            <!-- QR Pattern Corners -->
+                            <rect x="10" y="10" width="26" height="26" fill="none" stroke="#000" stroke-width="4"/>
+                            <rect x="18" y="18" width="10" height="10" fill="#000"/>
+                            <rect x="64" y="10" width="26" height="26" fill="none" stroke="#000" stroke-width="4"/>
+                            <rect x="72" y="18" width="10" height="10" fill="#000"/>
+                            <rect x="10" y="64" width="26" height="26" fill="none" stroke="#000" stroke-width="4"/>
+                            <rect x="18" y="72" width="10" height="10" fill="#000"/>
+                            <!-- QR Pixels -->
+                            <rect x="42" y="14" width="6" height="6" fill="#000"/>
+                            <rect x="52" y="24" width="6" height="6" fill="#000"/>
+                            <rect x="42" y="34" width="16" height="6" fill="#000"/>
+                            <rect x="14" y="44" width="20" height="6" fill="#000"/>
+                            <rect x="48" y="48" width="12" height="12" fill="#000"/>
+                            <rect x="70" y="44" width="16" height="6" fill="#000"/>
+                            <rect x="42" y="68" width="8" height="18" fill="#000"/>
+                            <rect x="58" y="74" width="14" height="6" fill="#000"/>
+                            <rect x="78" y="68" width="12" height="18" fill="#000"/>
+                        </svg>
+                    </div>
+                    <span class="share-qr-hint">Scan to open on smartphone or tablet</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ==================== UPLOAD MODAL ==================== -->
     <div class="overlay" id="upload-overlay" role="dialog" aria-modal="true" aria-labelledby="upload-title">
@@ -283,7 +532,7 @@
                         <label for="uploader-input">Uploader / Team Member Name</label>
                         <div class="input-with-icon">
                             <span class="field-icon">👤</span>
-                            <input type="text" id="uploader-input" placeholder="e.g. Alex Johnson" maxlength="40">
+                            <input type="text" id="uploader-input" placeholder="e.g. Rohith Nathani" maxlength="40">
                         </div>
                     </div>
                 </div>
@@ -296,7 +545,7 @@
         </div>
     </div>
 
-    <!-- ==================== VIEWER MODAL ==================== -->
+    <!-- ==================== RICH VIEWER MODAL ==================== -->
     <div class="overlay overlay--viewer" id="viewer-overlay" role="dialog" aria-modal="true" aria-labelledby="viewer-name">
         <div class="modal modal--viewer">
             <div class="modal__head">
@@ -308,14 +557,37 @@
                     </div>
                 </div>
                 <div class="viewer-toolbar">
+                    <!-- Zoom & Rotate controls (for images/PDFs) -->
+                    <div class="viewer-zoom-tools" id="viewer-zoom-tools" style="display:none;">
+                        <button class="icon-btn-sm" id="btn-zoom-out" title="Zoom Out">−</button>
+                        <span class="zoom-level-text" id="zoom-level-text">100%</span>
+                        <button class="icon-btn-sm" id="btn-zoom-in" title="Zoom In">+</button>
+                        <button class="icon-btn-sm" id="btn-rotate-img" title="Rotate 90°">🔄</button>
+                    </div>
+
+                    <!-- Ask AI Button inside viewer -->
+                    <button class="btn btn--ai-sparkle" id="viewer-ask-ai" title="Ask AI about this document">
+                        <span>🤖 Ask AI</span>
+                    </button>
+
+                    <!-- Copy Content -->
                     <button class="btn btn--ghost" id="viewer-copy" title="Copy Content to Clipboard" style="display:none;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                         <span id="viewer-copy-text">Copy</span>
                     </button>
+
+                    <!-- Share -->
+                    <button class="btn btn--ghost" id="viewer-share" title="Share Document Link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                        <span>Share</span>
+                    </button>
+
+                    <!-- Download -->
                     <button class="btn btn--primary" id="viewer-download" style="padding: 8px 16px; font-size: 13px;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16"/></svg>
                         <span>Download</span>
                     </button>
+                    
                     <button class="modal__close" id="viewer-close" title="Close Viewer" aria-label="Close">✕</button>
                 </div>
             </div>
@@ -327,7 +599,7 @@
     <div class="overlay" id="confirm-overlay" role="dialog" aria-modal="true">
         <div class="modal modal--confirm">
             <div class="modal__head">
-                <h2 class="modal__title">Delete Confirmation</h2>
+                <h2 class="modal__title" id="confirm-modal-heading">Delete Confirmation</h2>
                 <button class="modal__close" id="confirm-close" aria-label="Close">✕</button>
             </div>
             <div class="modal__body">
@@ -341,13 +613,56 @@
                         <button class="btn btn--ghost" id="confirm-cancel">Keep File</button>
                         <button class="btn btn--danger" id="confirm-yes">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m2 0v14a2 2 0 01-2 2H8a2 2 0 01-2-2V6h12z"/></svg>
-                            <span>Yes, Delete</span>
+                            <span id="confirm-yes-text">Yes, Delete</span>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- ==================== MOBILE BOTTOM NAVIGATION ==================== -->
+    <nav class="mobile-bottom-nav" aria-label="Mobile Navigation">
+        <button class="mobile-nav-item active" id="mob-nav-home" title="Documents List">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span>Docs</span>
+        </button>
+
+        <button class="mobile-nav-item" id="mob-nav-spotlight" title="Spotlight Search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <span>Find</span>
+        </button>
+
+        <!-- Center Upload FAB -->
+        <button class="mobile-upload-fab" id="mob-upload-fab" title="Quick Upload Document" aria-label="Upload Document">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+        </button>
+
+        <button class="mobile-nav-item" id="mob-nav-stats" title="Toggle Stats & Storage">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+            <span>Stats</span>
+        </button>
+
+        <button class="mobile-nav-item" id="mob-nav-theme" title="Toggle Light/Dark Theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <span>Theme</span>
+        </button>
+    </nav>
 
     <!-- ==================== FLOATING TOAST NOTIFICATIONS ==================== -->
     <div class="toasts" id="toasts" aria-live="polite"></div>
