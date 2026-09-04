@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="StoreDoc AI — A premium team document storage and management portal. Upload, view, download, and organize all your files in one place.">
+    <meta name="theme-color" content="#060a13">
+    <title>StoreDoc AI — Next-Gen Document Portal</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- ==================== ANIMATED BACKGROUND ==================== -->
+    <div class="bg-canvas" aria-hidden="true">
+        <div class="bg-orb bg-orb--1"></div>
+        <div class="bg-orb bg-orb--2"></div>
+        <div class="bg-orb bg-orb--3"></div>
+        <div class="bg-orb bg-orb--4"></div>
+    </div>
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <!-- ==================== APP WRAPPER ==================== -->
+    <div class="app">
+
+        <!-- ===== HEADER ===== -->
+        <header class="header">
+            <div class="header-brand">
+                <div class="header-logo" title="StoreDoc AI Portal">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <polyline points="22,6 12,13 2,6" />
+                        <path d="M12 12v6M9 15h6" stroke-linecap="round" />
+                    </svg>
+                    <span class="header-logo__pulse"></span>
+                </div>
+                <div class="header-info">
+                    <div class="header-title-row">
+                        <span class="header-title">StoreDoc</span>
+                        <span class="badge-ai">AI PRO</span>
+                    </div>
+                    <div class="header-subtitle">Enterprise Cloud Repository</div>
+                </div>
+            </div>
+
+            <!-- Header Quick Actions -->
+            <nav class="header-nav">
+                <!-- Sound Effects Toggle -->
+                <button class="icon-btn" id="sound-toggle" title="Toggle Sound Effects (Interface Beep)" aria-label="Toggle Sound Effects">
+                    <span class="sound-icon sound-icon--on">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        </svg>
+                    </span>
+                    <span class="sound-icon sound-icon--off" style="display:none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            <line x1="23" y1="9" x2="17" y2="15"></line>
+                            <line x1="17" y1="9" x2="23" y2="15"></line>
+                        </svg>
+                    </span>
+                </button>
+
+                <!-- Theme Toggle Button -->
+                <button class="icon-btn theme-toggle" id="theme-toggle" title="Switch Theme (Light/Dark)" aria-label="Toggle Theme">
+                    <span class="theme-icon theme-icon--dark">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1" x2="12" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="23"/>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            <line x1="1" y1="12" x2="3" y2="12"/>
+                            <line x1="21" y1="12" x2="23" y2="12"/>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                        </svg>
+                    </span>
+                    <span class="theme-icon theme-icon--light" style="display: none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                    </span>
+                </button>
+
+                <!-- Primary Desktop Upload Button -->
+                <button class="btn btn--primary" id="btn-open-upload">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 16V4m0 0L7 9m5-5l5 5M4 20h16"/>
+                    </svg>
+                    <span class="btn-text">Upload Documents</span>
+                </button>
+            </nav>
+        </header>
+
+        <!-- ===== STATS HERO SECTION ===== -->
+        <section class="stats" id="stats-section">
+            <div class="stat stat--docs">
+                <div class="stat-top">
+                    <div class="stat-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                    <span class="stat-badge stat-badge--live">LIVE SYNC</span>
+                </div>
+                <div class="stat-value" id="stat-total">0</div>
+                <div class="stat-label">Total Documents</div>
+            </div>
+
+            <div class="stat stat--storage">
+                <div class="stat-top">
+                    <div class="stat-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+                    </div>
+                    <span class="stat-meta" id="stat-storage-pct">0% Used</span>
+                </div>
+                <div class="stat-value" id="stat-storage">0 B</div>
+                <div class="stat-label">Server Storage</div>
+            </div>
+
+            <div class="stat stat--members">
+                <div class="stat-top">
+                    <div class="stat-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                    </div>
+                </div>
+                <div class="stat-value" id="stat-members">0</div>
+                <div class="stat-label">Contributors</div>
+            </div>
+
+            <div class="stat stat--types">
+                <div class="stat-top">
+                    <div class="stat-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                    </div>
+                </div>
+                <div class="stat-value" id="stat-types">0</div>
+                <div class="stat-label">File Formats</div>
+            </div>
+        </section>
+
+        <!-- ===== STORAGE USAGE BAR ===== -->
+        <div class="storage-bar-card">
+            <div class="storage-bar-header">
+                <span class="storage-bar-title">Cloud Storage Allocation</span>
+                <span class="storage-bar-info" id="storage-bar-text">0 B of 10 GB allocated</span>
+            </div>
+            <div class="storage-bar-track">
+                <div class="storage-bar-fill" id="storage-bar-fill" style="width: 1%;"></div>
+            </div>
+        </div>
+
+        <!-- ===== CONTROLS BAR ===== -->
+        <div class="controls">
+            <!-- Search input -->
+            <div class="search">
+                <span class="search__icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </span>
+                <input type="text" class="search__input" id="search-input" placeholder="Search by name, uploader, format..." autocomplete="off">
+                <button class="search__clear" id="search-clear" title="Clear search" aria-label="Clear search" style="display: none;">✕</button>
+            </div>
+
+            <!-- Sorting selector -->
+            <div class="sort-wrapper">
+                <select class="select-dropdown" id="sort-select" title="Sort documents">
+                    <option value="newest">🕒 Newest First</option>
+                    <option value="oldest">⏳ Oldest First</option>
+                    <option value="name_asc">🔤 Name (A → Z)</option>
+                    <option value="name_desc">🔡 Name (Z → A)</option>
+                    <option value="size_desc">📦 Size (Largest)</option>
+                    <option value="size_asc">📄 Size (Smallest)</option>
+                </select>
+            </div>
+
+            <!-- Filter chips -->
+            <div class="filters-container">
+                <div class="filters" id="filters-list">
+                    <button class="filter active" data-filter="all">All Files</button>
+                    <button class="filter" data-filter="pdf">📕 PDF</button>
+                    <button class="filter" data-filter="word">📘 Word</button>
+                    <button class="filter" data-filter="excel">📗 Excel</button>
+                    <button class="filter" data-filter="ppt">📙 PPT</button>
+                    <button class="filter" data-filter="json">📒 JSON</button>
+                    <button class="filter" data-filter="image">🖼️ Image</button>
+                    <button class="filter" data-filter="txt">📝 Code & Text</button>
+                    <button class="filter" data-filter="other">📎 Other</button>
+                </div>
+            </div>
+
+            <!-- View Modes (Grid / List) -->
+            <div class="view-modes">
+                <button class="view-mode active" id="view-grid" title="Grid View" aria-label="Grid View">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                </button>
+                <button class="view-mode" id="view-list" title="List View" aria-label="List View">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1.5" fill="currentColor"/><circle cx="4" cy="12" r="1.5" fill="currentColor"/><circle cx="4" cy="18" r="1.5" fill="currentColor"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== FILE GRID / LIST CONTAINER ===== -->
+        <main class="file-grid" id="file-grid" role="region" aria-label="Documents Grid"></main>
+
+    </div>
+
+    <!-- ==================== MOBILE BOTTOM NAVIGATION ==================== -->
+    <nav class="mobile-bottom-nav" aria-label="Mobile Navigation">
+        <button class="mobile-nav-item active" id="mob-nav-home" title="Documents List">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span>Docs</span>
+        </button>
+
+        <button class="mobile-nav-item" id="mob-nav-stats" title="Toggle Stats">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+            <span>Stats</span>
+        </button>
+
+        <!-- Center Upload FAB -->
+        <button class="mobile-upload-fab" id="mob-upload-fab" title="Quick Upload Document" aria-label="Upload Document">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+        </button>
+
+        <button class="mobile-nav-item" id="mob-nav-search" title="Focus Search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <span>Search</span>
+        </button>
+
+        <button class="mobile-nav-item" id="mob-nav-theme" title="Toggle Light/Dark Theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <span>Theme</span>
+        </button>
+    </nav>
+
+    <!-- ==================== UPLOAD MODAL ==================== -->
+    <div class="overlay" id="upload-overlay" role="dialog" aria-modal="true" aria-labelledby="upload-title">
+        <div class="modal modal--upload">
+            <div class="modal__head">
+                <div class="modal__title-wrapper">
+                    <span class="modal__title-icon">📤</span>
+                    <h2 class="modal__title" id="upload-title">Upload Documents</h2>
+                </div>
+                <button class="modal__close" id="upload-close" title="Close Upload Modal" aria-label="Close">✕</button>
+            </div>
+            <div class="modal__body">
+                <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Drop files here or click to browse">
+                    <div class="dropzone__anim-circle"></div>
+                    <span class="dropzone__icon">☁️</span>
+                    <div class="dropzone__text">Drag & drop your files here</div>
+                    <div class="dropzone__hint">or <span class="link" id="browse-link">browse files on your device</span></div>
+                    <div class="dropzone__specs">Supports PDF, Word, Excel, PPT, JSON, Images, Code (Up to 50 MB)</div>
+                    <input type="file" id="file-input" multiple hidden>
+                </div>
+
+                <div class="selected-list" id="selected-list"></div>
+
+                <div class="progress" id="progress">
+                    <div class="progress__bar" id="progress-bar"></div>
+                </div>
+
+                <div class="form-fields">
+                    <div class="field">
+                        <label for="uploader-input">Uploader / Team Member Name</label>
+                        <div class="input-with-icon">
+                            <span class="field-icon">👤</span>
+                            <input type="text" id="uploader-input" placeholder="e.g. Alex Johnson" maxlength="40">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn--primary btn--submit" id="submit-btn" disabled>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4m0 0L7 9m5-5l5 5M4 20h16"/></svg>
+                    <span>Upload Documents</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== VIEWER MODAL ==================== -->
+    <div class="overlay overlay--viewer" id="viewer-overlay" role="dialog" aria-modal="true" aria-labelledby="viewer-name">
+        <div class="modal modal--viewer">
+            <div class="modal__head">
+                <div class="viewer-head">
+                    <span class="viewer-head__icon" id="viewer-icon">📄</span>
+                    <div class="viewer-head__meta">
+                        <span class="viewer-head__name" id="viewer-name">Document</span>
+                        <span class="viewer-head__sub" id="viewer-sub">Preview</span>
+                    </div>
+                </div>
+                <div class="viewer-toolbar">
+                    <button class="btn btn--ghost" id="viewer-copy" title="Copy Content to Clipboard" style="display:none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        <span id="viewer-copy-text">Copy</span>
+                    </button>
+                    <button class="btn btn--primary" id="viewer-download" style="padding: 8px 16px; font-size: 13px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16"/></svg>
+                        <span>Download</span>
+                    </button>
+                    <button class="modal__close" id="viewer-close" title="Close Viewer" aria-label="Close">✕</button>
+                </div>
+            </div>
+            <div class="viewer-body" id="viewer-body"></div>
+        </div>
+    </div>
+
+    <!-- ==================== CONFIRM DELETE MODAL ==================== -->
+    <div class="overlay" id="confirm-overlay" role="dialog" aria-modal="true">
+        <div class="modal modal--confirm">
+            <div class="modal__head">
+                <h2 class="modal__title">Delete Confirmation</h2>
+                <button class="modal__close" id="confirm-close" aria-label="Close">✕</button>
+            </div>
+            <div class="modal__body">
+                <div class="confirm-box">
+                    <div class="confirm-box__icon-wrap">
+                        <span class="confirm-box__icon" id="confirm-icon">🗑️</span>
+                    </div>
+                    <div class="confirm-box__title" id="confirm-title">Delete Document?</div>
+                    <p class="confirm-box__msg" id="confirm-msg"></p>
+                    <div class="confirm-box__actions">
+                        <button class="btn btn--ghost" id="confirm-cancel">Keep File</button>
+                        <button class="btn btn--danger" id="confirm-yes">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m2 0v14a2 2 0 01-2 2H8a2 2 0 01-2-2V6h12z"/></svg>
+                            <span>Yes, Delete</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== FLOATING TOAST NOTIFICATIONS ==================== -->
+    <div class="toasts" id="toasts" aria-live="polite"></div>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script src="js/app.js"></script>
+
+</body>
+</html>
